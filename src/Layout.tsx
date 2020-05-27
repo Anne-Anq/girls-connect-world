@@ -29,6 +29,7 @@ import {
   EmojiNature,
 } from "@material-ui/icons"
 import tinycolor from "tinycolor2"
+import { DRAWER_WIDTH, PRIMARY_COLOR } from "./constants"
 
 const menus = [
   { title: "Event", Icon: Event },
@@ -40,9 +41,6 @@ const menus = [
   { title: "Crafts", Icon: FilterVintage },
   { title: "Nature", Icon: EmojiNature },
 ]
-
-const PRIMARY_COLOR = "#36e3e1"
-const DRAWER_WIDTH = 80
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
