@@ -3,7 +3,7 @@ import { Event } from "./types"
 
 export const getEventsByDate = () =>
   events.reduce((result: Record<string, Event[]>, event) => {
-    const dateKey = startOfDay(event.START_TIME).toString()
+    const dateKey = startOfDay(event.startTime).toString()
     if (result[dateKey]) {
       result[dateKey].push(event)
     } else {
@@ -15,8 +15,8 @@ export const getEventsByDate = () =>
 const events = [
   {
     id: "d",
-    START_TIME: new Date("May 27 2020 18:20"),
-    END_TIME: new Date("May 27 2020 18:40"),
+    startTime: new Date("May 27 2020 18:20"),
+    endTime: new Date("May 27 2020 18:40"),
     title: "Virtual Wine Night",
     imageUrl:
       "https://scontent.fyyc3-1.fna.fbcdn.net/v/t1.0-9/86970130_10157247993648693_7232224017313169408_n.jpg?_nc_cat=111&_nc_sid=340051&_nc_ohc=TGTns_RFJqwAX-xHlNI&_nc_ht=scontent.fyyc3-1.fna&oh=0eff2100b1572aacadb75ff87bd511e1&oe=5EF4AED6",
@@ -25,8 +25,8 @@ const events = [
   },
   {
     id: "qhxudkg",
-    START_TIME: new Date("May 28 2020 19:20"),
-    END_TIME: new Date("May 27 2020 20:40"),
+    startTime: new Date("May 28 2020 19:20"),
+    endTime: new Date("May 27 2020 20:40"),
     title: "Training Sesh",
     description: "Hey girls!!!\n  ...",
     imageUrl:
@@ -34,8 +34,8 @@ const events = [
   },
   {
     id: "qhxuooooog",
-    START_TIME: new Date("May 27 2020 19:20"),
-    END_TIME: new Date("May 27 2020 20:40"),
+    startTime: new Date("May 27 2020 19:20"),
+    endTime: new Date("May 27 2020 20:40"),
     title: "FREE Clothing Swap, Live Music, Donate, and More!",
     imageUrl:
       "https://scontent.fyyc3-1.fna.fbcdn.net/v/t1.0-9/97655805_2574858992763884_3737673273341640704_o.jpg?_nc_cat=109&_nc_sid=340051&_nc_ohc=8-meL4ctJHMAX_Rqpez&_nc_ht=scontent.fyyc3-1.fna&oh=8617d45d28c3f1738fea91271cfa2025&oe=5EF4FEA9",
@@ -44,8 +44,8 @@ const events = [
   },
   {
     id: "qhxuooeeooog",
-    START_TIME: new Date("May 17 2020 19:20"),
-    END_TIME: new Date("May 27 2020 20:40"),
+    startTime: new Date("May 17 2020 19:20"),
+    endTime: new Date("May 27 2020 20:40"),
     title: "FREE Clothing Swap, Live Music, Donate, and More!",
     imageUrl:
       "https://scontent.fyyc3-1.fna.fbcdn.net/v/t1.0-9/97655805_2574858992763884_3737673273341640704_o.jpg?_nc_cat=109&_nc_sid=340051&_nc_ohc=8-meL4ctJHMAX_Rqpez&_nc_ht=scontent.fyyc3-1.fna&oh=8617d45d28c3f1738fea91271cfa2025&oe=5EF4FEA9",
@@ -54,8 +54,8 @@ const events = [
   },
   {
     id: "qhxuorrrroooog",
-    START_TIME: new Date("May 7 2020 19:20"),
-    END_TIME: new Date("May 27 2020 20:40"),
+    startTime: new Date("May 7 2020 19:20"),
+    endTime: new Date("May 27 2020 20:40"),
     title: "FREE Clothing Swap, Live Music, Donate, and More!",
     imageUrl:
       "https://scontent.fyyc3-1.fna.fbcdn.net/v/t1.0-9/97655805_2574858992763884_3737673273341640704_o.jpg?_nc_cat=109&_nc_sid=340051&_nc_ohc=8-meL4ctJHMAX_Rqpez&_nc_ht=scontent.fyyc3-1.fna&oh=8617d45d28c3f1738fea91271cfa2025&oe=5EF4FEA9",
@@ -64,8 +64,8 @@ const events = [
   },
   {
     id: "qhxuoggggoooog",
-    START_TIME: new Date("June 1 2020 19:20"),
-    END_TIME: new Date("May 27 2020 20:40"),
+    startTime: new Date("June 1 2020 19:20"),
+    endTime: new Date("May 27 2020 20:40"),
     title: "FREE Clothing Swap, Live Music, Donate, and More!",
     imageUrl:
       "https://scontent.fyyc3-1.fna.fbcdn.net/v/t1.0-9/97655805_2574858992763884_3737673273341640704_o.jpg?_nc_cat=109&_nc_sid=340051&_nc_ohc=8-meL4ctJHMAX_Rqpez&_nc_ht=scontent.fyyc3-1.fna&oh=8617d45d28c3f1738fea91271cfa2025&oe=5EF4FEA9",

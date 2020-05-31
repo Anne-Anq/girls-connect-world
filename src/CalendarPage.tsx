@@ -1,5 +1,15 @@
-import React from "react"
-import { makeStyles, Theme, Card, Typography } from "@material-ui/core"
+import React, { useState } from "react"
+import firebase from "firebase"
+import {
+  makeStyles,
+  Theme,
+  Card,
+  Typography,
+  Dialog,
+  IconButton,
+  Paper,
+} from "@material-ui/core"
+import { Add } from "@material-ui/icons"
 import {
   addMonths,
   startOfMonth,
@@ -7,6 +17,7 @@ import {
   eachMonthOfInterval,
   format,
   startOfDay,
+  endOfDay,
 } from "date-fns"
 import { getDateRangesPerMonth } from "./utils"
 import { getEventsByDate } from "./fakeDb"
@@ -28,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: "column",
     backgroundColor: tinycolor(PRIMARY_COLOR).lighten(40).toString(),
     maxHeight: "30vh",
+  },
+  dayBoxHeader: {
+    display: "flex",
   },
   disabled: {
     color: "#cdcdcd",
@@ -99,22 +113,52 @@ const DayBox = ({
   events?: Event[]
 }) => {
   const classes = useStyles()
-
+  const [isEventFormOpen, setIsEventFormOpen] = useState(false)
   return (
-    <div className={`${classes.dayBox} ${disabled ? classes.disabled : ""}`}>
-      {format(date, "dd")}
-      {events?.map((event) => (
-        <Card className={classes.eventCard} key={event.id}>
-          <Typography noWrap className={classes.monthTitle}>
-            {event.title}
-          </Typography>
-          <img
-            className={classes.image}
-            src={event.imageUrl}
-            alt={event.title}
-          ></img>
-        </Card>
-      ))}
-    </div>
+    <>
+      <div className={`${classes.dayBox} ${disabled ? classes.disabled : ""}`}>
+        <div className={classes.dayBoxHeader}>
+          {format(date, "dd")}
+          <IconButton onClick={() => setIsEventFormOpen(true)}>
+            <Add />
+          </IconButton>
+        </div>
+        {events?.map((event) => (
+          <Card className={classes.eventCard} key={event.id}>
+            <Typography noWrap className={classes.monthTitle}>
+              {event.title}
+            </Typography>
+            <img
+              className={classes.image}
+              src={event.imageUrl}
+              alt={event.title}
+            ></img>
+          </Card>
+        ))}
+      </div>
+      <Dialog open={isEventFormOpen}>
+        <Paper>
+          ADD A EVENT FORM HERE
+          <button
+            onClick={() =>
+              firebase
+                .functions()
+                .httpsCallable("createEvent")({
+                  formData: {
+                    title: "body cruch",
+                    description: "coolio",
+                    startTime: startOfDay(date).toString(),
+                    endTime: endOfDay(date).toString(),
+                  },
+                })
+                .then(() => setIsEventFormOpen(false))
+                .catch((err) => console.log(err))
+            }
+          >
+            ADD
+          </button>
+        </Paper>
+      </Dialog>
+    </>
   )
 }

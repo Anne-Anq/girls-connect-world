@@ -1,7 +1,7 @@
 export type Event = {
   id: string
-  START_TIME: Date
-  END_TIME: Date
+  startTime: Date
+  endTime: Date
   title: string
   description: string
   imageUrl: string
