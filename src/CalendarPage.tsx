@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   monthTitle: {},
   month: {
     display: "grid",
-    gridTemplateColumns: `repeat(7, ${100 / 7}%)`,
+    gridTemplateColumns: `repeat(7, auto)`,
     gridTemplateRows: "auto",
     gridGap: theme.spacing(0.5),
   },
