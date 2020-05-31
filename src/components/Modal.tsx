@@ -11,9 +11,12 @@ import { Close } from "@material-ui/icons"
 
 const useStyles = makeStyles((theme: Theme) => ({
   dialogPaper: {
-    padding: theme.spacing(2),
     width: "80vw",
     height: "80vh",
+  },
+  paper: {
+    padding: theme.spacing(2),
+    height: "100%",
   },
   title: {
     display: "flex",
@@ -30,8 +33,12 @@ type Props = {
 export const Modal = ({ children, modalTitle, open, onClose }: Props) => {
   const classes = useStyles()
   return (
-    <Dialog open={open} onClose={onClose}>
-      <Paper className={classes.dialogPaper}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      classes={{ paper: classes.dialogPaper }}
+    >
+      <Paper className={classes.paper}>
         <div className={classes.title}>
           <Typography>{modalTitle}</Typography>
           <IconButton onClick={onClose}>

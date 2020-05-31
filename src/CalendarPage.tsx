@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   dayBoxHeader: {
     display: "flex",
+    alignItems: "center",
   },
   disabled: {
     color: "#cdcdcd",
@@ -119,10 +120,12 @@ const DayBox = ({
     <>
       <div className={`${classes.dayBox} ${disabled ? classes.disabled : ""}`}>
         <div className={classes.dayBoxHeader}>
-          {format(date, "dd")}
-          <IconButton onClick={() => setIsEventFormOpen(true)}>
-            <Add />
-          </IconButton>
+          <Typography>{format(date, "dd")}</Typography>
+          {!disabled && (
+            <IconButton onClick={() => setIsEventFormOpen(true)} size="small">
+              <Add />
+            </IconButton>
+          )}
         </div>
         {events?.map((event) => (
           <Card className={classes.eventCard} key={event.id}>

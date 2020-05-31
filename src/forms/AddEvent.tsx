@@ -9,12 +9,16 @@ import {
   makeStyles,
 } from "@material-ui/core"
 import { startOfDay, endOfDay } from "date-fns"
+import { string, object, date as yupDate } from "yup"
 import { formatUTCDateTimeToLocal } from "../utils"
 
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
     display: "flex",
     flexDirection: "column",
+  },
+  field: {
+    margin: theme.spacing(1, 0),
   },
 }))
 
@@ -28,15 +32,54 @@ const FormTextField = ({
   type: "text" | "datetime-local"
 }) => {
   const [field, meta] = useField(name)
+  const classes = useStyles()
   return (
-    <>
-      <TextField id={name} label={label} {...field} type={type} />
+    <div className={classes.field}>
+      <TextField id={name} label={label} {...field} type={type} fullWidth />
       {meta.touched && meta.error ? (
         <FormHelperText error>{meta.error}</FormHelperText>
       ) : null}
-    </>
+    </div>
   )
 }
+
+type CreateEventPayload = {
+  title: string
+  description?: string
+  startTime: string
+  endTime: string
+}
+
+const handleSubmit = (formData: CreateEventPayload, onSuccess: () => void) => {
+  formData.startTime = new Date(formData.startTime).toString()
+  formData.endTime = new Date(formData.endTime).toString()
+  return firebase
+    .functions()
+    .httpsCallable("createEvent")({
+      formData,
+    })
+    .then(onSuccess)
+    .catch((err) => console.log(err))
+}
+
+const getInitialValues = (date: Date) => ({
+  title: "",
+  description: "",
+  startTime: formatUTCDateTimeToLocal(startOfDay(date)),
+  endTime: formatUTCDateTimeToLocal(endOfDay(date)),
+})
+
+const getValidationSchema = () =>
+  object({
+    title: string().trim().required("Title is required."),
+    description: string().trim(),
+    startTime: yupDate().required("Start time is required."),
+    endTime: yupDate()
+      .when("startTime", (start: Date) =>
+        yupDate().min(start, "End time must be after start time.")
+      )
+      .required("End time is required."),
+  })
 
 export const AddEvent = ({
   date,
@@ -48,23 +91,9 @@ export const AddEvent = ({
   const classes = useStyles()
   return (
     <Formik
-      onSubmit={(formData) => {
-        formData.startTime = new Date(formData.startTime).toString()
-        formData.endTime = new Date(formData.endTime).toString()
-        return firebase
-          .functions()
-          .httpsCallable("createEvent")({
-            formData,
-          })
-          .then(onSuccess)
-          .catch((err) => console.log(err))
-      }}
-      initialValues={{
-        title: "",
-        description: "",
-        startTime: formatUTCDateTimeToLocal(startOfDay(date)),
-        endTime: formatUTCDateTimeToLocal(endOfDay(date)),
-      }}
+      onSubmit={(formData) => handleSubmit(formData, onSuccess)}
+      initialValues={getInitialValues(date)}
+      validationSchema={getValidationSchema()}
     >
       <Form className={classes.form}>
         <FormTextField label="Title" name="title" type="text" />
