@@ -11,3 +11,7 @@ Install all the dependencies with `npm i` from the root of this new folder. Then
 
 In `/src` folder add a config files withe the configuration content. Make sure to never push that file!! It is and should remain in`.gitignore`.
 
+### `npm start`
+
+You should now be able to see the app locally by running npm start
+
