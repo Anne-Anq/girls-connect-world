@@ -1,15 +1,17 @@
 import * as functions from "firebase-functions"
-import { firestore } from "firebase-admin"
+import * as admin from "firebase-admin"
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  storageBucket: "gs://girl-connect-world.appspot.com",
+})
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
 export const createEvent = functions.https.onCall(async ({ formData }) => {
   try {
-    await firestore()
+    await admin
+      .firestore()
       .batch()
-      .create(firestore().collection("events").doc(), formData)
-    await firestore().batch().commit()
+      .create(admin.firestore().collection("events").doc(), formData)
+    await admin.firestore().batch().commit()
   } catch (err) {
     throw err
   }
