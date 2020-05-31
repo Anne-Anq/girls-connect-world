@@ -18,7 +18,7 @@ import {
 import { AddEvent } from "./forms/AddEvent"
 import { Modal } from "./components/Modal"
 import { getDateRangesPerMonth } from "./utils"
-import { getEventsByDate } from "./fakeDb"
+import { useEventsByDate } from "./dbHooks"
 import { Event } from "./types"
 import { PRIMARY_COLOR } from "./constants"
 import tinycolor from "tinycolor2"
@@ -66,13 +66,13 @@ export const CalendarPage = () => {
   const calendarStart = startOfMonth(selectedDate)
   const calendarEnd = endOfMonth(addMonths(selectedDate, monthsShown))
   const months = eachMonthOfInterval({ start: calendarStart, end: calendarEnd })
-  const eventsByDate = getEventsByDate()
+  const eventsByDate = useEventsByDate()
   return (
     <div>
       {months.map((month) => {
         const { beforeDates, dates, afterDates } = getDateRangesPerMonth(month)
         return (
-          <>
+          <div key={format(month, "MMM yyyy")}>
             <Typography variant="h6" noWrap className={classes.monthTitle}>
               {format(month, "MMM yyyy")}
             </Typography>
@@ -80,6 +80,7 @@ export const CalendarPage = () => {
             <div className={classes.month}>
               {beforeDates.map((date: Date) => (
                 <DayBox
+                  key={date.toString()}
                   date={date}
                   disabled
                   events={eventsByDate[startOfDay(date).toString()]}
@@ -87,18 +88,20 @@ export const CalendarPage = () => {
               ))}
               {dates.map((date: Date) => (
                 <DayBox
+                  key={date.toString()}
                   date={date}
                   events={eventsByDate[startOfDay(date).toString()]}
                 />
               ))}
               {afterDates.map((date: Date) => (
                 <DayBox
+                  key={date.toString()}
                   date={date}
                   events={eventsByDate[startOfDay(date).toString()]}
                 />
               ))}
             </div>
-          </>
+          </div>
         )
       })}
     </div>
