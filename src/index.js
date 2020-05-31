@@ -10,7 +10,7 @@ import "firebase/storage"
 import "firebase/firestore"
 import "firebase/messaging"
 import "firebase/functions"
-import { firebaseConfig } from "../config"
+import { firebaseConfig } from "./config"
 
 firebase.initializeApp(firebaseConfig)
 
