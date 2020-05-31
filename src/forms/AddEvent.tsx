@@ -11,7 +11,7 @@ import {
 import { startOfDay, endOfDay } from "date-fns"
 import { string, object, date as yupDate } from "yup"
 import { formatUTCDateTimeToLocal } from "../utils"
-import { CreateEventPayload } from "../types"
+import { CreateEventPayload, CreateEventFormData } from "../types"
 
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
@@ -44,14 +44,13 @@ const FormTextField = ({
   )
 }
 
-const handleSubmit = (formData: CreateEventPayload, onSuccess: () => void) => {
-  formData.startTime = new Date(formData.startTime).toString()
-  formData.endTime = new Date(formData.endTime).toString()
+const handleSubmit = (formData: CreateEventFormData, onSuccess: () => void) => {
+  formData.startTime = new Date(formData.startTime).toUTCString()
+  formData.endTime = new Date(formData.endTime).toUTCString()
+  const payload: CreateEventPayload = { formData }
   return firebase
     .functions()
-    .httpsCallable("createEvent")({
-      formData,
-    })
+    .httpsCallable("createEvent")(payload)
     .then(onSuccess)
     .catch((err) => console.log(err))
 }

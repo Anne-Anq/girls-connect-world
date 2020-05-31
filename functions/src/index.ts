@@ -9,7 +9,13 @@ const db = admin.firestore()
 export const createEvent = functions.https.onCall(async ({ formData }) => {
   try {
     const docRef = db.collection("events").doc()
-    const setEvent = docRef.set(formData)
+    const startTime = admin.firestore.Timestamp.fromDate(
+      new Date(formData.startTime)
+    )
+    const endTime = admin.firestore.Timestamp.fromDate(
+      new Date(formData.endTime)
+    )
+    const setEvent = docRef.set({ ...formData, startTime, endTime })
     return setEvent
   } catch (err) {
     throw err
