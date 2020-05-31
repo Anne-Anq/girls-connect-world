@@ -95,13 +95,32 @@ export const AddEvent = ({
       initialValues={getInitialValues(date)}
       validationSchema={getValidationSchema()}
     >
-      <Form className={classes.form}>
-        <FormTextField label="Title" name="title" type="text" />
-        <FormTextField label="Description" name="description" type="text" />
-        <FormTextField label="Start" name="startTime" type="datetime-local" />
-        <FormTextField label="End" name="endTime" type="datetime-local" />
-        <Button type="submit">Save</Button>
-      </Form>
+      {(formikProps) => {
+        return (
+          <Form className={classes.form}>
+            <FormTextField label="Title" name="title" type="text" />
+            <FormTextField label="Description" name="description" type="text" />
+            <FormTextField
+              label="Start"
+              name="startTime"
+              type="datetime-local"
+            />
+            <FormTextField label="End" name="endTime" type="datetime-local" />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={
+                !Object.keys(formikProps.touched).length ||
+                !formikProps.isValid ||
+                formikProps.isSubmitting
+              }
+            >
+              {formikProps.isSubmitting ? "Saving" : "Save"}
+            </Button>
+          </Form>
+        )
+      }}
     </Formik>
   )
 }
