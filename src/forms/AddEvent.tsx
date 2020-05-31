@@ -11,6 +11,7 @@ import {
 import { startOfDay, endOfDay } from "date-fns"
 import { string, object, date as yupDate } from "yup"
 import { formatUTCDateTimeToLocal } from "../utils"
+import { CreateEventPayload } from "../types"
 
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
@@ -43,13 +44,6 @@ const FormTextField = ({
   )
 }
 
-type CreateEventPayload = {
-  title: string
-  description?: string
-  startTime: string
-  endTime: string
-}
-
 const handleSubmit = (formData: CreateEventPayload, onSuccess: () => void) => {
   formData.startTime = new Date(formData.startTime).toString()
   formData.endTime = new Date(formData.endTime).toString()
@@ -65,6 +59,7 @@ const handleSubmit = (formData: CreateEventPayload, onSuccess: () => void) => {
 const getInitialValues = (date: Date) => ({
   title: "",
   description: "",
+  location: "",
   startTime: formatUTCDateTimeToLocal(startOfDay(date)),
   endTime: formatUTCDateTimeToLocal(endOfDay(date)),
 })
@@ -73,6 +68,7 @@ const getValidationSchema = () =>
   object({
     title: string().trim().required("Title is required."),
     description: string().trim(),
+    location: string().trim(),
     startTime: yupDate().required("Start time is required."),
     endTime: yupDate()
       .when("startTime", (start: Date) =>
@@ -100,6 +96,7 @@ export const AddEvent = ({
           <Form className={classes.form}>
             <FormTextField label="Title" name="title" type="text" />
             <FormTextField label="Description" name="description" type="text" />
+            <FormTextField label="Location" name="location" type="text" />
             <FormTextField
               label="Start"
               name="startTime"
