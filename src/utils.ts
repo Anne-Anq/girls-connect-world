@@ -4,6 +4,7 @@ import {
   getDay,
   subDays,
   addDays,
+  format,
 } from "date-fns"
 
 export const getDateRangesPerMonth = (month: Date) => {
@@ -26,4 +27,10 @@ export const getDateRangesPerMonth = (month: Date) => {
         end: addDays(endOfMonth(month), daysAfterEnd),
       })
   return { beforeDates, dates, afterDates }
+}
+
+export const formatUTCDateTimeToLocal = (date: Date) => {
+  const day = format(date, "Y-MM-dd")
+  const time = format(date, "HH:mm")
+  return `${day}T${time}`
 }

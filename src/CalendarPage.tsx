@@ -1,13 +1,10 @@
 import React, { useState } from "react"
-import firebase from "firebase"
 import {
   makeStyles,
   Theme,
   Card,
   Typography,
-  Dialog,
   IconButton,
-  Paper,
 } from "@material-ui/core"
 import { Add } from "@material-ui/icons"
 import {
@@ -17,8 +14,9 @@ import {
   eachMonthOfInterval,
   format,
   startOfDay,
-  endOfDay,
 } from "date-fns"
+import { AddEvent } from "./forms/AddEvent"
+import { Modal } from "./components/Modal"
 import { getDateRangesPerMonth } from "./utils"
 import { getEventsByDate } from "./fakeDb"
 import { Event } from "./types"
@@ -54,6 +52,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   eventCard: {
     margin: theme.spacing(0.5),
     flex: 1,
+  },
+  dialogPaper: {
+    padding: theme.spacing(2),
   },
 }))
 
@@ -136,29 +137,13 @@ const DayBox = ({
           </Card>
         ))}
       </div>
-      <Dialog open={isEventFormOpen}>
-        <Paper>
-          ADD A EVENT FORM HERE
-          <button
-            onClick={() =>
-              firebase
-                .functions()
-                .httpsCallable("createEvent")({
-                  formData: {
-                    title: "body cruch",
-                    description: "coolio",
-                    startTime: startOfDay(date).toString(),
-                    endTime: endOfDay(date).toString(),
-                  },
-                })
-                .then(() => setIsEventFormOpen(false))
-                .catch((err) => console.log(err))
-            }
-          >
-            ADD
-          </button>
-        </Paper>
-      </Dialog>
+      <Modal
+        open={isEventFormOpen}
+        onClose={() => setIsEventFormOpen(false)}
+        modalTitle="Add an Event"
+      >
+        <AddEvent date={date} onSuccess={() => setIsEventFormOpen(false)} />
+      </Modal>
     </>
   )
 }
