@@ -4,14 +4,13 @@ admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   storageBucket: "gs://girl-connect-world.appspot.com",
 })
+const db = admin.firestore()
 
 export const createEvent = functions.https.onCall(async ({ formData }) => {
   try {
-    await admin
-      .firestore()
-      .batch()
-      .create(admin.firestore().collection("events").doc(), formData)
-    await admin.firestore().batch().commit()
+    const docRef = db.collection("events").doc()
+    const setEvent = docRef.set(formData)
+    return setEvent
   } catch (err) {
     throw err
   }
