@@ -18,7 +18,6 @@ function App() {
       <Layout>
         <main className={classes.content}>
           <Toolbar />
-
           <Switch>
             <Route path="/users">
               <div>to do </div>

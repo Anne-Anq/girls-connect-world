@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import {
   makeStyles,
   Theme,
@@ -21,10 +21,14 @@ import { getDateRangesPerMonth } from "./utils"
 import { useEventsByDate } from "./dbHooks"
 import { Event } from "./types"
 import { PRIMARY_COLOR } from "./constants"
+import { DrawerContext } from "./contexts"
 import tinycolor from "tinycolor2"
 
 const useStyles = makeStyles((theme: Theme) => ({
-  monthTitle: {},
+  monthTitle: {
+    fontSize: "1.5rem",
+    paddingTop: theme.spacing(2),
+  },
   month: {
     display: "grid",
     gridTemplateColumns: `repeat(7, auto)`,
@@ -53,9 +57,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   eventCard: {
     margin: theme.spacing(0.5),
     flex: 1,
+    cursor: "pointer",
   },
   dialogPaper: {
     padding: theme.spacing(2),
+  },
+  eventTitle: {
+    transform: "uppercase",
   },
 }))
 
@@ -97,6 +105,7 @@ export const CalendarPage = () => {
                 <DayBox
                   key={date.toString()}
                   date={date}
+                  disabled
                   events={eventsByDate[startOfDay(date).toString()]}
                 />
               ))}
@@ -119,6 +128,7 @@ const DayBox = ({
 }) => {
   const classes = useStyles()
   const [isEventFormOpen, setIsEventFormOpen] = useState(false)
+  const drawer = useContext(DrawerContext)
   return (
     <>
       <div className={`${classes.dayBox} ${disabled ? classes.disabled : ""}`}>
@@ -131,10 +141,12 @@ const DayBox = ({
           )}
         </div>
         {events?.map((event) => (
-          <Card className={classes.eventCard} key={event.id}>
-            <Typography noWrap className={classes.monthTitle}>
-              {event.title}
-            </Typography>
+          <Card
+            className={classes.eventCard}
+            key={event.id}
+            onClick={() => drawer.setContent(<EventDetail event={event} />)}
+          >
+            <Typography noWrap>{event.title}</Typography>
             <img
               className={classes.image}
               src={event.imageUrl}
@@ -151,5 +163,19 @@ const DayBox = ({
         <AddEvent date={date} onSuccess={() => setIsEventFormOpen(false)} />
       </Modal>
     </>
+  )
+}
+
+type EventDetailProps = { event: Event }
+
+const EventDetail = ({ event }: EventDetailProps) => {
+  const classes = useStyles()
+  return (
+    <div>
+      <Typography variant="h6" className={classes.eventTitle}>
+        {event.title}
+      </Typography>
+      <Typography>{event.description}</Typography>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Drawer,
   AppBar,
@@ -27,9 +27,15 @@ import {
   Pets,
   Spa,
   EmojiNature,
+  ChevronRight,
 } from "@material-ui/icons"
 import tinycolor from "tinycolor2"
-import { DRAWER_WIDTH, PRIMARY_COLOR } from "./constants"
+import {
+  LEFT_DRAWER_WIDTH,
+  PRIMARY_COLOR,
+  RIGHT_DRAWER_WIDTH,
+} from "./constants"
+import { DrawerContext } from "./contexts"
 
 const menus = [
   { title: "Event", Icon: Event },
@@ -56,11 +62,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: theme.spacing(6),
   },
   drawer: {
-    width: DRAWER_WIDTH,
+    width: LEFT_DRAWER_WIDTH,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: DRAWER_WIDTH,
+    width: LEFT_DRAWER_WIDTH,
     backgroundColor: tinycolor(PRIMARY_COLOR).lighten(30).toString(),
   },
   drawerContainer: {
@@ -74,6 +80,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   listItemIcon: {
     minWidth: 0,
   },
+  rightDrawerPaper: {
+    width: RIGHT_DRAWER_WIDTH,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  drawerContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    padding: theme.spacing(2),
+  },
 }))
 
 type Props = {
@@ -82,7 +100,7 @@ type Props = {
 
 export const Layout = ({ children }: Props) => {
   const classes = useStyles()
-
+  const [content, setContent] = useState<JSX.Element | null>(null)
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
@@ -131,7 +149,25 @@ export const Layout = ({ children }: Props) => {
           </List>
         </div>
       </Drawer>
-      {children}
+      <DrawerContext.Provider value={{ content, setContent }}>
+        {children}
+        <Drawer
+          variant="persistent"
+          anchor="right"
+          open={!!content}
+          classes={{
+            paper: classes.rightDrawerPaper,
+          }}
+        >
+          <Toolbar />
+          <Tooltip title="close">
+            <IconButton onClick={() => setContent(null)}>
+              <ChevronRight />
+            </IconButton>
+          </Tooltip>
+          <div className={classes.drawerContent}>{content}</div>
+        </Drawer>
+      </DrawerContext.Provider>
     </div>
   )
 }
