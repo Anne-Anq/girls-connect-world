@@ -18,8 +18,6 @@ export const useEventsByDate = () => {
     },
     {}
   )
-
-  console.log(eventsByDate)
   return eventsByDate
 }
 
@@ -31,7 +29,6 @@ const useEvents = () => {
   useEffect(() => {
     if (!isRequested) {
       setIsRequested(true)
-      console.log("onSnapshot")
       db.collection("events").onSnapshot(function (querySnapshot) {
         const data: Event[] = []
         querySnapshot.forEach(function (doc) {

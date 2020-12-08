@@ -44,6 +44,16 @@ const FormTextField = ({
   )
 }
 
+const FileInputField = ({ name }: { name: string }) => {
+  const [field] = useField(name)
+  const classes = useStyles()
+  return (
+    <div className={classes.field}>
+      <input type="file" accept="image/*" id={name} {...field} />
+    </div>
+  )
+}
+
 const handleSubmit = (formData: CreateEventFormData, onSuccess: () => void) => {
   formData.startTime = new Date(formData.startTime).toUTCString()
   formData.endTime = new Date(formData.endTime).toUTCString()
@@ -61,6 +71,7 @@ const getInitialValues = (date: Date) => ({
   location: "",
   startTime: formatUTCDateTimeToLocal(startOfDay(date)),
   endTime: formatUTCDateTimeToLocal(endOfDay(date)),
+  file: "",
 })
 
 const getValidationSchema = () =>
@@ -74,6 +85,7 @@ const getValidationSchema = () =>
         yupDate().min(start, "End time must be after start time.")
       )
       .required("End time is required."),
+    file: string(),
   })
 
 export const AddEvent = ({
@@ -91,6 +103,7 @@ export const AddEvent = ({
       validationSchema={getValidationSchema()}
     >
       {(formikProps) => {
+        console.log(formikProps.values)
         return (
           <Form className={classes.form}>
             <FormTextField label="Title" name="title" type="text" />
@@ -102,6 +115,7 @@ export const AddEvent = ({
               type="datetime-local"
             />
             <FormTextField label="End" name="endTime" type="datetime-local" />
+            <FileInputField name="file" />
             <Button
               type="submit"
               variant="contained"
